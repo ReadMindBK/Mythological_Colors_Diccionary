@@ -208,7 +208,7 @@
     
     <audio id="a" src="audio.mp3"></audio>
     
-    <button id="play">▶ Escuchar</button>
+    <button id="play">▶ Hear</button>
     
     <input id="prog" type="range" min="0" value="0">
     
@@ -390,7 +390,7 @@
 
 
     /* =========================================================
-       BOTÓN REPRODUCIR / PAUSA
+       BOTÓN REPRODUCIR / PAUSE
        ========================================================= */
 
     p.onclick = () => {
@@ -399,7 +399,7 @@
 
         a.play();
 
-        p.textContent = "⏸ Pausa";
+        p.textContent = "⏸ Pause";
 
         p.animate(
           [
@@ -414,7 +414,7 @@
 
         a.pause();
 
-        p.textContent = "▶ Escuchar";
+        p.textContent = "▶ Hear";
 
       }
 
@@ -499,7 +499,7 @@
 
     a.addEventListener("ended", () => {
 
-      p.textContent = "▶ Escuchar";
+      p.textContent = "▶ Hear";
 
       pr.value = pr.max;
 
