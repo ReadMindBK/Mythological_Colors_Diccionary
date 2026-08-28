@@ -3,127 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>READMIND</title>
+  <title>Audio Diccionario</title>
   
   <style>
-    /* Estilos generales del cuerpo */
+    /* Estilos extraídos de CSS */
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-      min-height: 100vh;
-      box-sizing: border-box;
+      background:
+      margin: 0;
     }
 
-    /* Estilos de la tarjeta principal */
-    .card {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 22px;
-      padding: 16px;
-      animation: fade .6s ease;
-      box-sizing: border-box;
-    }
-
-    @keyframes fade {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: none; }
+    .wrap {
+      max-width: 420px;
+      margin: auto;
+      padding: 10px;
+      text-align: center;
     }
 
     .cover {
       width: 100%;
       border-radius: 18px;
-      display: block;
     }
 
-.controls {
-      display: flex;
-      justify-content: center; /* <-- Agrega esta línea para centrar el botón */
-      gap: 10px;
-      margin-top: 18px;
+    button {
+      padding: 10px 16px;
+      margin: 8px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
+      font-size: 20px;
+      font-weight: bold;
     }
 
-button {
-      /* flex: 1;  <-- ELIMINA ESTA LÍNEA */
-      width: 200px; /* <-- Agrega esta línea para controlar qué tan angosto es */
-      padding: 14px;
+    #play {
+      width: 200px;
+      padding: 12px;
       border: none;
       border-radius: 14px;
-      background: #2f80ed; /* Tu color verde */
+      background: #007bff;
       color: white;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 20px;
       cursor: pointer;
       transition: .2s;
     }
 
-    button:hover { transform: translateY(-2px); }
-    button:active { transform: scale(.96); }
-
-/* 1. Quitamos los estilos por defecto del input */
-    #progress {
-      width: 80%;
-      display: block; /* <-- Necesario para poder centrar la barra */
-      margin: 18px auto 0 auto; /* <-- Mantiene el espacio arriba y centra la barra horizontalmente */
-      margin-top: 18px;
-      -webkit-appearance: none; /* Necesario para Chrome/Safari */
-      appearance: none;
-      background: transparent;
-      outline: none;
+    .jump {
+      display: block;
+      width: 100%;
+      margin: 0;
+      background: #007bff;
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    /* 2. Estilos para la BARRA (el fondo por donde se mueve el punto) */
-    /* Para Chrome, Safari, Edge */
-    #progress::-webkit-slider-runnable-track {
-      width: 80%;
-      height: 6px;
-      background: #e0e0e0; /* Color gris para la barra */
-      border-radius: 4px;
-    }
-    /* Para Firefox */
-    #progress::-moz-range-track {
-      width: 80%;
-      height: 6px;
-      background: #e0e0e0; /* Color gris para la barra */
-      border-radius: 4px;
+    .active {
+      background: #ff8c1a !important;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(255, 140, 26, 0.8);
     }
 
-    /* 3. Estilos SOLO para el PUNTO que avanza */
-    /* Para Chrome, Safari, Edge */
-    #progress::-webkit-slider-thumb {
+    /* =========================================================
+       BARRA DE PROGRESO
+       ========================================================= */
+
+    input[type="range"] {
+      width: 80%;
+      display: block;
+      margin: 10px auto 15px auto;
+
       -webkit-appearance: none;
-      height: 16px;
-      width: 16px;
-      border-radius: 50%;
-      background: #2f80ed; /* Aquí ponemos el verde SOLO para el punto */
-      cursor: pointer;
-      margin-top: -5px; /* Centra el punto sobre la barra (alto barra 6px, alto punto 16px) */
+      appearance: none;
+
+      /* 
+         La barra se pinta dinámicamente mediante JavaScript.
+         Azul = parte reproducida
+         Gris = parte restante
+      */
+      background: linear-gradient(
+        to right,
+        #007bff 0%,
+        #007bff 0%,
+        #e0e0e0 0%,
+        #e0e0e0 100%
+      );
+
+      outline: none;
+      border-radius: 4px;
     }
-    /* Para Firefox */
-    #progress::-moz-range-thumb {
-      height: 16px;
-      width: 16px;
+
+    /* =========================================================
+       BARRA - CHROME / EDGE / SAFARI
+       ========================================================= */
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 6px;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    /* =========================================================
+       BARRA - FIREFOX
+       ========================================================= */
+
+    input[type="range"]::-moz-range-track {
+      width: 100%;
+      height: 6px;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    /* =========================================================
+       PUNTO DE LA BARRA - CHROME / EDGE / SAFARI
+       ========================================================= */
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+
+      height: 18px;
+      width: 18px;
+
       border-radius: 50%;
-      background: #2f80ed; /* Color verde SOLO para el punto */
+
+      /* MISMO AZUL QUE LA PARTE RECORRIDA */
+      background: #007bff;
+
+      cursor: pointer;
+
+      margin-top: -6px;
+    }
+
+    /* =========================================================
+       PUNTO DE LA BARRA - FIREFOX
+       ========================================================= */
+
+    input[type="range"]::-moz-range-thumb {
+      height: 18px;
+      width: 18px;
+
+      border-radius: 50%;
+
+      /* MISMO AZUL QUE LA PARTE RECORRIDA */
+      background: #007bff;
+
       border: none;
+
       cursor: pointer;
     }
 
-    #time {
-      text-align: center;
-      color: #666;
-      margin-top: 8px;
+    #cur,
+    #dur {
+      font-size: 18px;
+      font-weight: bold;
     }
 
-    /* Contenedor para centrar la imagen del botón */
+    #buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    /* =========================================================
+       BOTÓN FINAL CON IMAGEN
+       ========================================================= */
+
     .contenedor-enlace-web {
       text-align: center;
-      margin-top: 300px; 
-      margin-bottom: 10px;
+      margin-top: 25px; 
+      margin-bottom: 15px;
       width: 100%;
     }
 
@@ -132,76 +184,330 @@ button {
       text-decoration: none;
     }
 
-    /* Estilos para la imagen del botón */
     .imagen-boton {
-      max-width: 260px; /* Tamaño máximo deseado para la imagen (puedes cambiarlo) */
-      width: 100%;       /* Para que sea responsive en celulares */
-      height: auto;      /* Mantiene la proporción de la imagen */
+      max-width: 260px;
+      width: 100%;
+      height: auto;
       display: block;
       margin: 0 auto;
       transition: transform 0.2s ease;
     }
 
-    /* Efecto al pasar el mouse por encima */
     .imagen-boton:hover {
-      transform: scale(1.05); /* Se agranda un 5% */
+      transform: scale(1.05);
       cursor: pointer;
     }
   </style>
 </head>
+
 <body>
 
-  <div class="card">
-    <img class="cover" src="portada.png" alt="Portada">
-    
-    <div class="controls">
-      <button id="play">▶ Hear</button>
-    </div>
-    
-    <input id="progress" type="range" min="0" max="100" value="0">
-    <div id="time">00:00 / 00:00</div>
-    <audio id="audio"><source src="audio.mp3" type="audio/mpeg"></audio>
+  <div class="wrap">
 
-    <!-- BOTÓN EN FORMA DE IMAGEN -->
-    <div class="contenedor-enlace-web">
-      <!-- 1. Cambia '#' por la URL de tu página web de destino -->
-      <a href="https://readmindbk.github.io/WEB/" class="enlace-imagen" target="_blank">
-        <!-- 2. Cambia 'tu-imagen-boton.png' por el nombre exacto de tu archivo de imagen -->
-        <img class="imagen-boton" src="web.png" alt="Sitio Web">
-      </a>
+    <img src="portada.png" class="cover" alt="Portada">
+    
+    <audio id="a" src="audio.mp3"></audio>
+    
+    <button id="play">▶ Escuchar</button>
+    
+    <input id="prog" type="range" min="0" value="0">
+    
+    <div>
+      <span id="cur">0:00</span> / <span id="dur">0:00</span>
     </div>
+
+    <!-- Contenedor para la lista de capítulos/secciones -->
+    <div id="buttons"></div>
+
+    <!-- BOTÓN FINAL CON IMAGEN -->
+    <div class="contenedor-enlace-web">
+
+      <a href="https://readmindbk.github.io/WEB/" 
+         class="enlace-imagen" 
+         target="_blank">
+
+        <img class="imagen-boton" 
+             src="web.png" 
+             alt="Sitio Web">
+
+      </a>
+
+    </div>
+
   </div>
 
-  <script>
-    const a = document.getElementById('audio');
-    const p = document.getElementById('play');
-    const r = document.getElementById('progress');
-    const t = document.getElementById('time');
 
-    function f(s) {
-      if (!isFinite(s)) return "00:00";
-      let m = Math.floor(s / 60), x = Math.floor(s % 60);
-      return String(m).padStart(2, '0') + ':' + String(x).padStart(2, '0');
+  <script>
+
+    /* =========================================================
+       SECCIONES DEL AUDIO
+       ========================================================= */
+
+    const sections = [
+      {t: 13.5, n: '1 Ashes'},
+      {t: 17, n: '2 Bravery'},
+      {t: 20.5, n: '3 Campsite'},
+      {t: 24.5, n: '4 Cetacean'},
+      {t: 28.5, n: '5 Corral'},
+      {t: 33, n: '6 Creation'},
+      {t: 37, n: '7 Darkness'},
+      {t: 39.5, n: '8 Deity'},
+      {t: 44, n: '9 Desert'},
+      {t: 48, n: '10 Fang'},
+      {t: 52.5, n: '11 Farmer'},
+      {t: 55.5, n: '12 Flute'},
+      {t: 58.5, n: '13 Folklore'},
+      {t: 64, n: '14 Ghost'},
+      {t: 68.5, n: '15 Guardian'},
+      {t: 73.5, n: '16 Hero'},
+      {t: 78.5, n: '17 Himalayas'},
+      {t: 82, n: '18 Incubate'},
+      {t: 86.5, n: '19 Intelligence'},
+      {t: 90.5, n: '20 Ireland'},
+      {t: 95, n: '21 Jackal'},
+      {t: 100.5, n: '22 Knight'},
+      {t: 104.5, n: '23 Labyrinth'},
+      {t: 109, n: '24 Legend'},
+      {t: 114, n: '25 Medicinal'},
+      {t: 117.5, n: '26 Merchant'},
+      {t: 121, n: '27 Messenger'},
+      {t: 125, n: '28 Middle Ages'},
+      {t: 129.5, n: '29 Mischief'},
+      {t: 136, n: '30 Mission'},
+      {t: 139.5, n: '31 Myth'},
+      {t: 144.5, n: '32 Nagas'},
+      {t: 148.5, n: '33 Narwhal'},
+      {t: 152, n: '34 Native'},
+      {t: 156.5, n: '35 Nature'},
+      {t: 160.5, n: '36 Ocean'},
+      {t: 164, n: '37 Passageway'},
+      {t: 168, n: '38 Poison'},
+      {t: 172.5, n: '39 Rebirth'},
+      {t: 177, n: '40 Riddle'},
+      {t: 181, n: '41 Scotland'},
+      {t: 185, n: '42 Selfishness'},
+      {t: 189, n: '43 Spell'},
+      {t: 193.5, n: '44 Spirit'},
+      {t: 198.5, n: '45 Squid'},
+      {t: 201.5, n: '46 Statue'},
+      {t: 206.5, n: '47 Summit'},
+      {t: 209.5, n: '48 Swamp'},
+      {t: 213, n: '49 Territory'},
+      {t: 218, n: '50 Treasure'},
+      {t: 223, n: '51 Transylvania'},
+      {t: 228, n: '52 Underground'},
+      {t: 231.5, n: '53 Viking'},
+      {t: 236, n: '54 Wise person'},
+      {t: 240, n: '55 Writer'},
+    ];
+
+
+    /* =========================================================
+       ELEMENTOS HTML
+       ========================================================= */
+
+    const a = document.getElementById('a');
+    const b = document.getElementById('buttons');
+    const p = document.getElementById('play');
+    const pr = document.getElementById('prog');
+    const c = document.getElementById('cur');
+    const d = document.getElementById('dur');
+
+
+    /* =========================================================
+       CREAR BOTONES DE SALTO
+       ========================================================= */
+
+    sections.forEach((s) => {
+
+      const bt = document.createElement('button');
+
+      bt.className = 'jump';
+
+      bt.textContent = s.n;
+
+      bt.onclick = () => {
+        a.currentTime = s.t;
+      };
+
+      b.appendChild(bt);
+
+    });
+
+
+    /* =========================================================
+       FORMATEAR TIEMPO
+       ========================================================= */
+
+    function fmt(x) {
+
+      if (isNaN(x)) return "0:00";
+
+      const min = Math.floor(x / 60);
+
+      const sec = Math.floor(x % 60);
+
+      return `${min}:${String(sec).padStart(2, '0')}`;
+
     }
 
-    p.onclick = () => {
-      if (a.paused) {
-        a.play();
-        p.textContent = '⏸ Pause';
-        p.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 250 });
-      } else {
-        a.pause();
-        p.textContent = '▶ Hear';
+
+    /* =========================================================
+       ACTUALIZAR COLOR DE LA BARRA
+       ========================================================= */
+
+    function updateProgressBar() {
+
+      /*
+         Calculamos qué porcentaje del audio se reprodujo.
+      */
+
+      if (!a.duration || !isFinite(a.duration)) {
+        return;
       }
+
+      const percentage = (a.currentTime / a.duration) * 100;
+
+
+      /*
+         Pintamos:
+
+         AZUL   = parte reproducida
+         GRIS   = parte restante
+      */
+
+      pr.style.background = `
+        linear-gradient(
+          to right,
+          #007bff 0%,
+          #007bff ${percentage}%,
+          #e0e0e0 ${percentage}%,
+          #e0e0e0 100%
+        )
+      `;
+
+    }
+
+
+    /* =========================================================
+       BOTÓN REPRODUCIR / PAUSA
+       ========================================================= */
+
+    p.onclick = () => {
+
+      if (a.paused) {
+
+        a.play();
+
+        p.textContent = "⏸ Pausa";
+
+        p.animate(
+          [
+            { transform: "scale(1.2)" },
+            { transform: "scale(1.08)" },
+            { transform: "scale(1.2)" }
+          ],
+          { duration: 250 }
+        );
+
+      } else {
+
+        a.pause();
+
+        p.textContent = "▶ Escuchar";
+
+      }
+
     };
 
-    a.ontimeupdate = () => {
-      r.value = (a.currentTime / (a.duration || 1)) * 100;
-      t.textContent = f(a.currentTime) + ' / ' + f(a.duration);
-    };
 
-    r.oninput = () => a.currentTime = (r.value / 100) * (a.duration || 0);
-    a.onended = () => p.textContent = '▶ Hear';
+    /* =========================================================
+       CUANDO SE CONOCE LA DURACIÓN DEL AUDIO
+       ========================================================= */
+
+    a.addEventListener("loadedmetadata", () => {
+
+      pr.min = 0;
+
+      pr.max = a.duration;
+
+      pr.step = 0.01;
+
+      pr.value = 0;
+
+      c.textContent = fmt(0);
+
+      d.textContent = fmt(a.duration);
+
+      /* Iniciar barra completamente gris */
+      updateProgressBar();
+
+    });
+
+
+    /* =========================================================
+       ACTUALIZAR BARRA, TIEMPO Y CAPÍTULO ACTIVO
+       ========================================================= */
+
+    a.addEventListener("timeupdate", () => {
+
+      /* Actualizar posición */
+      pr.value = a.currentTime;
+
+      /* Actualizar tiempo */
+      c.textContent = fmt(a.currentTime);
+
+      /* ACTUALIZAR COLOR DE LA BARRA */
+      updateProgressBar();
+
+
+      /* Determinar capítulo activo */
+
+      const activeIndex =
+        sections.filter(s => a.currentTime >= s.t).length - 1;
+
+
+      document.querySelectorAll(".jump").forEach((btn, i) => {
+
+        btn.classList.toggle(
+          "active",
+          i === activeIndex
+        );
+
+      });
+
+    });
+
+
+    /* =========================================================
+       PERMITIR MOVER LA BARRA MANUALMENTE
+       ========================================================= */
+
+    pr.addEventListener("input", () => {
+
+      a.currentTime = Number(pr.value);
+
+      /* Actualizar inmediatamente el color */
+      updateProgressBar();
+
+    });
+
+
+    /* =========================================================
+       CUANDO TERMINA EL AUDIO
+       ========================================================= */
+
+    a.addEventListener("ended", () => {
+
+      p.textContent = "▶ Escuchar";
+
+      pr.value = pr.max;
+
+      /* Barra completamente azul */
+      updateProgressBar();
+
+    });
+
   </script>
 
 </body>
